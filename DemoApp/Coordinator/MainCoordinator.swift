@@ -22,7 +22,7 @@ class MainCoordinator: Coordinator {
     }
     
     func openAsset(asset: Asset) {
-        let vm = AssetDetailsViewModel(asset: asset)
+        let vm = AssetDetailsViewModel()
         let vc = AssetDetailsViewController(vm, self)
         navigationController.navigationBar.isHidden = true
         navigationController.interactivePopGestureRecognizer?.isEnabled = true

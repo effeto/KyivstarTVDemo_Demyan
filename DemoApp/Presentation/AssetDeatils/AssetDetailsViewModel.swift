@@ -2,13 +2,11 @@ import Foundation
 import Combine
 
 final class AssetDetailsViewModel: ObservableObject {
-    @Published var asset: Asset
     @Published var assetDetailsResponse: AssetDetailsResponse?
     
     @Published var isFavorite: Bool = false
     
-    init(asset: Asset) {
-        self.asset = asset
+    init() {
         self.startAssetView()
     }
     

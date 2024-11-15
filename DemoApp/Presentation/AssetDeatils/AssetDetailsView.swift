@@ -22,7 +22,7 @@ struct AssetDetailsView: View {
     private var titleImageView: some View {
         return VStack {
             ZStack(alignment: .topLeading) {
-                if let url = self.viewModel.asset.image {
+                if let url = self.viewModel.assetDetailsResponse?.image {
                     LazyImage(url: url) { state in
                         if let image = state.image {
                             image
@@ -151,9 +151,18 @@ struct AssetDetailsView: View {
     private var contentScrollView: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
-                self.titleNameText
-                self.titleInfoText
-                self.titleDescriptionText
+                if let name = self.viewModel.assetDetailsResponse?.name, name != "" {
+                    self.titleNameText(name: name)
+                }
+                
+                if let duration = self.viewModel.assetDetailsResponse?.duration, duration != 0 {
+                    self.titleInfoText(duration: duration)
+                }
+                
+                if let description = self.viewModel.assetDetailsResponse?.description, description != "" {
+                    self.titleDescriptionText(description: description)
+                }
+                
                 SimilarItemsGridView(viewModel: self.viewModel)
             }
         }
@@ -162,9 +171,9 @@ struct AssetDetailsView: View {
     }
     
     // MARK: - Title Name Text
-    private var titleNameText: some View {
+    private func titleNameText(name: String) -> some View {
         HStack {
-            Text(self.viewModel.asset.name ?? "")
+            Text(self.viewModel.assetDetailsResponse?.name ?? "")
                 .font(.system(size: 22, weight: .bold))
                 .multilineTextAlignment(.leading)
             Spacer()
@@ -172,8 +181,8 @@ struct AssetDetailsView: View {
     }
     
     // MARK: - Title Info Text
-    private var titleInfoText: some View {
-        let infoString = "Adventure • 1h 35m • 2020" 
+    private func titleInfoText(duration: Int) -> some View {
+        let infoString = "Adventure • \(duration.toTimeString()) • 2020"
         
         return HStack {
             Text(infoString)
@@ -186,11 +195,9 @@ struct AssetDetailsView: View {
     }
     
     // MARK: - Title Description Text
-    private var titleDescriptionText: some View {
-        let infoString = "When his best friend Gary is suddenly snatched away, SpongeBob takes Patrick on a madcap mission far beyon..."
-        
+    private func titleDescriptionText(description: String) -> some View {
         return HStack {
-            Text(infoString)
+            Text(description)
                 .font(.system(size: 12, weight: .regular))
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(Color(hex: "808890"))
